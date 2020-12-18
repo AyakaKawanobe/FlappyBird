@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		796E4858258C96D900CE922A /* bgm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 796E4856258C96D900CE922A /* bgm.mp3 */; };
+		796E4859258C96D900CE922A /* apple.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 796E4857258C96D900CE922A /* apple.mp3 */; };
 		79C21ACE2589B11F0083481D /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C21ACD2589B11F0083481D /* GameScene.swift */; };
 		79F860EF258731CE0057AA73 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F860EE258731CE0057AA73 /* AppDelegate.swift */; };
 		79F860F1258731CE0057AA73 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F860F0258731CE0057AA73 /* SceneDelegate.swift */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		796E4856258C96D900CE922A /* bgm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bgm.mp3; sourceTree = "<group>"; };
+		796E4857258C96D900CE922A /* apple.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = apple.mp3; sourceTree = "<group>"; };
 		79C21ACD2589B11F0083481D /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		79F860EB258731CE0057AA73 /* FlappyBird.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlappyBird.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		79F860EE258731CE0057AA73 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +66,8 @@
 				79F860F0258731CE0057AA73 /* SceneDelegate.swift */,
 				79F860F2258731CE0057AA73 /* ViewController.swift */,
 				79C21ACD2589B11F0083481D /* GameScene.swift */,
+				796E4857258C96D900CE922A /* apple.mp3 */,
+				796E4856258C96D900CE922A /* bgm.mp3 */,
 				79F860F4258731CE0057AA73 /* Main.storyboard */,
 				79F860F7258731D10057AA73 /* Assets.xcassets */,
 				79F860F9258731D10057AA73 /* LaunchScreen.storyboard */,
@@ -131,6 +137,8 @@
 				79F860FB258731D10057AA73 /* LaunchScreen.storyboard in Resources */,
 				79F860F8258731D10057AA73 /* Assets.xcassets in Resources */,
 				79F860F6258731CE0057AA73 /* Main.storyboard in Resources */,
+				796E4858258C96D900CE922A /* bgm.mp3 in Resources */,
+				796E4859258C96D900CE922A /* apple.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
