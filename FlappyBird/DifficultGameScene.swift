@@ -1,8 +1,8 @@
 //
-//  GameScene.swift
+//  DifficultGameScene.swift
 //  FlappyBird
 //
-//  Created by aykawano on 2020/12/16.
+//  Created by aykawano on 2020/12/21.
 //  Copyright © 2020 ayaka. All rights reserved.
 //
 
@@ -10,17 +10,18 @@ import UIKit
 import SpriteKit
 import AVFoundation
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
+class DifficultGameScene: SKScene, SKPhysicsContactDelegate {
     
     var scrollNode : SKNode!
     var wallNode : SKNode!
     var bird : SKSpriteNode!
     var apple : SKSpriteNode!
     var appleNode : SKNode!
+    var button : SKNode!
     
     var player : AVAudioPlayer!
     //バックミュージック
-    let bgm = SKAudioNode(fileNamed: "bgm.mp3")
+    let bgm = SKAudioNode(fileNamed: "difficultbgm.mp3")
     //効果音
     let appleMusic = SKAction.playSoundFileNamed("apple.mp3", waitForCompletion: true)
     
@@ -34,10 +35,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     //スコア用
     var score = 0
     var item = 0
+    var bestScore = 0
     var scoreLabelNode : SKLabelNode!
     var bestScoreLabelNode : SKLabelNode!
     var itemScoreLabelNode : SKLabelNode!
     let userDefaults : UserDefaults = UserDefaults.standard
+    
+    //カウントダウン用
+    var countdownLabel : SKLabelNode!
+    var count = 3
 
     //SKView上にシーンが表示される時に呼ばれるメソッド
     //画面を構築する処理やゲームの初期設定を行う
@@ -45,11 +51,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(bgm)
         
         //重力を設定
-        physicsWorld.gravity = CGVector(dx: 0, dy: -4)
+        physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
         
         //背景色を指定
-        backgroundColor = UIColor(red: 0.15, green: 0.75, blue: 0.90, alpha: 1)
+        backgroundColor = #colorLiteral(red: 0.521568656, green: 0.1098039225, blue: 0.05098039284, alpha: 1)
         
         //スクロールするスプライトの親ノード
         scrollNode = SKNode()
@@ -63,6 +69,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         appleNode = SKNode()
         scrollNode.addChild(appleNode)
         
+        //ボタン用ノード
+        button = SKNode()
+        
+        //カウントダウンメソッド
+        countdown(count: self.count)
+        scrollNode.speed = 0
+        
         //各種スプライトを生成する処理をメソッドに分割
         setupGround()
         setupCloud()
@@ -71,6 +84,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         setupApple()
         
         setupScoreLabel()
+        
+    }
+    
+    //ゲームスタート前カウントダウン
+    func countdown(count: Int){
+        countdownLabel = SKLabelNode()
+        countdownLabel.text = "\(count)"
+        countdownLabel.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
+        countdownLabel.color = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        countdownLabel.fontSize = 100
+        countdownLabel.zPosition = 120
+        
+        addChild(countdownLabel)
+        
+        let countDecrement = SKAction.sequence([SKAction.wait(forDuration: 1.0),SKAction.run(countdownAction)])
+        run(SKAction.sequence([SKAction.repeat(countDecrement, count: 3),SKAction.run(endCountdown)]))
+    }
+    
+    func countdownAction(){
+        count -= 1
+        countdownLabel.text = "\(count)"
+    }
+    
+    func endCountdown(){
+        countdownLabel.removeFromParent()
+        
+        //スクロール開始
+        scrollNode.speed = 2
+        
+        //カウントダウン終了したら重力持たせる
+        physicsWorld.gravity = CGVector(dx: 0, dy: -4)
+        
     }
     
     func setupGround(){
@@ -180,7 +225,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let slit_length = birdSize.height * 3
         
         //隙間位置の上下の振れ幅を鳥のサイズの3倍とする
-        let random_y_range = birdSize.height * 3
+        let random_y_range = birdSize.height * 5
         
         //下の壁のY軸下限位置（中央位置から下方向の最大振れ幅で下の壁を表示させる位置）を計算
         let groundSize = SKTexture(imageNamed: "ground").size()
@@ -264,9 +309,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // スプライトを作成
         bird = SKSpriteNode(texture: birdTextureA)
         bird.position = CGPoint(x: self.frame.size.width * 0.2, y:self.frame.size.height * 0.7)
-
+        
         // 物理演算を設定
         bird.physicsBody = SKPhysicsBody(circleOfRadius: bird.size.height / 2)
+        
         
         //衝突時に回転させない
         bird.physicsBody?.allowsRotation = false
@@ -353,8 +399,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //鳥に縦方向の力を加える
             bird.physicsBody?.applyImpulse(CGVector(dx: 0, dy: 15))
         }else if bird.speed == 0{
-            restart()
+            //ボタン選択
+            if let touch = touches.first as UITouch?{
+                let location = touch.location(in: self)
+                if self.atPoint(location).name == "onemore"{
+                    restart()
+                }else if self.atPoint(location).name == "level"{
+                    //レベル選択画面を呼び出す
+                    let scene = LevelSelectScene(size: self.scene!.size)
+                    scene.scaleMode = SKSceneScaleMode.aspectFill
+                    self.view?.presentScene(scene)
+                }
+                
+            }
         }
+        
     }
     
     //SKPhysicsContactDelegateのメソッド。衝突した時に呼ばれる
@@ -377,11 +436,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             scoreLabelNode.text = "Score:\(score)"
             
             //ベストスコア更新か確認する
-            var bestScore = userDefaults.integer(forKey : "BEST")
-            if score > bestScore{
-                bestScore = score
-                bestScoreLabelNode.text = "BestScore:\(bestScore)"
-                userDefaults.set(bestScore, forKey: "BEST")
+            bestScore = userDefaults.integer(forKey : "difficultBest")
+            if score + item > bestScore{
+                bestScore = score + item
+                bestScoreLabelNode.text = "BestScore:\(bestScore)!!!!"
+                userDefaults.set(bestScore, forKey: "difficultBest")
                 //即座に保存する
                 userDefaults.synchronize()
             }
@@ -390,6 +449,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //アイテムと衝突した
             item += 1
             itemScoreLabelNode.text = "ItemScore:\(item)"
+            
+            //ベストスコア更新か確認する
+            bestScore = userDefaults.integer(forKey : "difficultBest")
+            if score + item > bestScore{
+                bestScore = score + item
+                bestScoreLabelNode.text = "BestScore:\(bestScore)!!!!"
+                userDefaults.set(bestScore, forKey: "difficultBest")
+                //即座に保存する
+                userDefaults.synchronize()
+            }
             
             //衝突したリンゴを抽出
             var apple :SKPhysicsBody
@@ -406,6 +475,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             //衝突したリンゴを削除
             apple.node?.removeFromParent()
             
+            //bird.size = CGSize(width: bird.size.width * 1.1, height: bird.size.height * 1.1)
+            
         }else{
             //壁か地面に衝突した
             print("GameOver")
@@ -419,14 +490,55 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             bird.run(roll, completion:{
                 self.bird.speed = 0
             })
+            
+            //レベル選択画面に戻るかもう一度か
+            //もう一度ボタン作成
+            let onemoreButton = SKShapeNode(rectOf: CGSize(width: 150, height: 40), cornerRadius: 10)
+            onemoreButton.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2 + 100)
+            onemoreButton.fillColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            onemoreButton.zPosition = 50
+            onemoreButton.name = "onemore"
+            button.addChild(onemoreButton)
+            
+            let onemoreText = SKLabelNode()
+            onemoreText.text = "もう一度"
+            onemoreText.fontColor = #colorLiteral(red: 0.06274510175, green: 0, blue: 0.1921568662, alpha: 1)
+            onemoreText.position = CGPoint(x: onemoreButton.position.x, y: onemoreButton.position.y - 10)
+            onemoreText.zPosition = 70
+            onemoreText.fontSize = 20
+            onemoreText.name = "onemore"
+            button.addChild(onemoreText)
+            
+            //レベル選択ボタン作成
+            let levelButton = SKShapeNode(rectOf: CGSize(width: 150, height: 40), cornerRadius: 10)
+            levelButton.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
+            levelButton.fillColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+            levelButton.zPosition = 50
+            levelButton.name = "level"
+            button.addChild(levelButton)
+            
+            let levelText = SKLabelNode()
+            levelText.text = "レベル変更"
+            levelText.fontColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            levelText.position = CGPoint(x: levelButton.position.x, y: levelButton.position.y - 10)
+            levelText.zPosition = 70
+            levelText.fontSize = 20
+            levelText.name = "level"
+            button.addChild(levelText)
+            
+            addChild(button)
+            
         }
     }
     
     func restart(){
+        physicsWorld.gravity = CGVector(dx: 0, dy: 0)
+        
         score = 0
         scoreLabelNode.text = "Score:\(score)"
         item = 0
         itemScoreLabelNode.text = "ItemScore:\(item)"
+        bestScoreLabelNode.text = "BestScore:\(bestScore)"
         
         bird.position = CGPoint(x: self.frame.size.width * 0.2, y: self.frame.size.height * 0.7)
         bird.physicsBody?.velocity = CGVector.zero
@@ -435,9 +547,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         wallNode.removeAllChildren()
         appleNode.removeAllChildren()
+        button.removeFromParent()
         
         bird.speed = 1
-        scrollNode.speed = 1
+        //bird.size = CGSize(width: bird.size.width, height: bird.size.height)
+        
+        scrollNode.speed = 0
+        count = 3
+        
+        countdown(count: count)
     }
     
     func setupScoreLabel(){
@@ -465,7 +583,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bestScoreLabelNode.zPosition = 100
         bestScoreLabelNode.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.left
         
-        let bestScore = userDefaults.integer(forKey: "BEST")
+        let bestScore = userDefaults.integer(forKey: "difficultBest")
         bestScoreLabelNode.text = "Best Score:\(bestScore)"
         self.addChild(bestScoreLabelNode)
     }

@@ -24,7 +24,7 @@ class ViewController: UIViewController {
         skView.showsNodeCount = true
         
         //ビューと同じサイズでシーンを作成する
-        let scene = GameScene(size: skView.frame.size)
+        let scene = LevelSelectScene(size: skView.frame.size)
         
         //ビューにシーンを作成する
         skView.presentScene(scene)
