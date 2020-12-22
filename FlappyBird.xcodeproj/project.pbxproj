@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		796E4858258C96D900CE922A /* bgm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 796E4856258C96D900CE922A /* bgm.mp3 */; };
 		796E4859258C96D900CE922A /* apple.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 796E4857258C96D900CE922A /* apple.mp3 */; };
-		796E485B25902F5A00CE922A /* TopScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796E485A25902F5A00CE922A /* TopScene.swift */; };
 		797BF5982591D64E001A5FC3 /* difficultbgm.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 797BF5972591D64E001A5FC3 /* difficultbgm.mp3 */; };
 		79B74877259060C70033A8CE /* LevelSelectScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B74876259060C70033A8CE /* LevelSelectScene.swift */; };
 		79B748792590916C0033A8CE /* EasyGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B748782590916C0033A8CE /* EasyGameScene.swift */; };
@@ -26,7 +25,6 @@
 /* Begin PBXFileReference section */
 		796E4856258C96D900CE922A /* bgm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bgm.mp3; sourceTree = "<group>"; };
 		796E4857258C96D900CE922A /* apple.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = apple.mp3; sourceTree = "<group>"; };
-		796E485A25902F5A00CE922A /* TopScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopScene.swift; sourceTree = "<group>"; };
 		797BF5972591D64E001A5FC3 /* difficultbgm.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = difficultbgm.mp3; sourceTree = "<group>"; };
 		79B74876259060C70033A8CE /* LevelSelectScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelSelectScene.swift; sourceTree = "<group>"; };
 		79B748782590916C0033A8CE /* EasyGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasyGameScene.swift; sourceTree = "<group>"; };
@@ -75,7 +73,6 @@
 				79F860EE258731CE0057AA73 /* AppDelegate.swift */,
 				79F860F0258731CE0057AA73 /* SceneDelegate.swift */,
 				79F860F2258731CE0057AA73 /* ViewController.swift */,
-				796E485A25902F5A00CE922A /* TopScene.swift */,
 				79B74876259060C70033A8CE /* LevelSelectScene.swift */,
 				79B748782590916C0033A8CE /* EasyGameScene.swift */,
 				79C21ACD2589B11F0083481D /* UsualGameScene.swift */,
@@ -167,7 +164,6 @@
 			files = (
 				79F860F3258731CE0057AA73 /* ViewController.swift in Sources */,
 				79B748792590916C0033A8CE /* EasyGameScene.swift in Sources */,
-				796E485B25902F5A00CE922A /* TopScene.swift in Sources */,
 				79F860EF258731CE0057AA73 /* AppDelegate.swift in Sources */,
 				79C21ACE2589B11F0083481D /* UsualGameScene.swift in Sources */,
 				79B7487B2590917F0033A8CE /* DifficultGameScene.swift in Sources */,

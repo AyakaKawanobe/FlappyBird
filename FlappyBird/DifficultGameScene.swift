@@ -424,12 +424,6 @@ class DifficultGameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if(contact.bodyA.categoryBitMask & scoreCategory) == scoreCategory || (contact.bodyB.categoryBitMask & scoreCategory) == scoreCategory{
-            print(contact.bodyA.categoryBitMask & scoreCategory)
-            print(contact.bodyB.categoryBitMask & scoreCategory)
-            print(contact.bodyA.categoryBitMask)
-            print(contact.bodyB.categoryBitMask)
-            print(scoreCategory)
-
             //スコア用の物体と衝突した
             print("ScoreUP")
             score += 1
